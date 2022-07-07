@@ -203,6 +203,24 @@ int main() {
                    << "}}" << std::endl;
                 passed = true;
                 break;
+              } else if ((plt.get_backend() == 
+                          backend::cuda || 
+                          plt.get_backend() == 
+                          backend::ext_oneapi_cuda) && 
+                         (sycl_be.find("cuda") != std::string::npos)) {
+                fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
+                   << "}}" << std::endl;
+                passed = true;
+                break;
+              } else if ((plt.get_backend() ==
+                         backend::hip ||
+                         plt.get_backend() ==
+                         backend::ext_oneapi_hip) &&
+                        (sycl_be.find("hip") != std::string::npos)) {
+                fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
+                   << "}}" << std::endl;
+                   passed = true;
+                   break;
               }
             }
           }
