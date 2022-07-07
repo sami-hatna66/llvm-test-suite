@@ -196,8 +196,10 @@ int main() {
                    << "}}" << std::endl;
                 passed = true;
                 break;
-              } else if ((plt.get_backend() ==
-                          backend::ext_oneapi_level_zero) &&
+              } else if (((plt.get_backend() ==
+                           backend::ext_oneapi_level_zero) || 
+                          (plt.get_backend() == 
+                           backend::ext_oneapi_level_zero)) &&
                          (sycl_be.find("level_zero") != std::string::npos)) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
@@ -271,7 +273,8 @@ int main() {
           std::string ver = plt.get_info<info::platform::version>();
           if (((plt.get_backend() == backend::opencl) &&
                (sycl_be.find("opencl") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+              (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                (plt.get_backend() == backend::level_zero)) &&
                (sycl_be.find("level_zero") != std::string::npos)) ||
               (((plt.get_backend() == backend::cuda) ||
                 (plt.get_backend() == backend::ext_oneapi_cuda)) &&
@@ -333,8 +336,15 @@ int main() {
               std::string ver("98.76.54321");
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
-                   (sycl_be.find("level_zero") != std::string::npos))) {
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
+                   (sycl_be.find("level_zero") != std::string::npos)) || 
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
+                   (sycl_be.find("cuda") != std::string::npos)) ||
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
+                   (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
                 passed = true;
