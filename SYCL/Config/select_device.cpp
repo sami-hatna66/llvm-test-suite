@@ -410,6 +410,22 @@ int main() {
                << "}}" << std::endl;
             passed = true;
             break;
+          } else if (((plt.get_backend() == backend::ext_oneapi_cuda) ||
+                      (plt.get_backend() == backend::cuda)) &&
+                     (sycl_be.find("cuda") != std::string::npos)) {
+            std::string ver("CUDA 89.78");
+            fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
+               << "}}" << std::endl;
+            passed = true;
+            break;
+          } else if (((plt.get_backend() == backend::ext_oneapi_hip) ||
+                      (plt.get_backend() == backend::hip)) &&
+                     (sycl_be.find("hip") != std::string::npos)) {
+            std::string ver("67.88.9");
+            fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
+               << "}}" << std::endl;
+            passed = true;
+            break;
           }
         }
       }
