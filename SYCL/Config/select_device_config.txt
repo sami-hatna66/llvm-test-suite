@@ -1,0 +1,1 @@
+PlatformName:{{NVIDIA CUDA BACKEND}},PlatformVersion:{{CUDA 11.6}}
