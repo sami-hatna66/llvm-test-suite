@@ -878,7 +878,13 @@ int main() {
                    (sycl_be.find("opencl") != std::string::npos)) ||
                   (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
                     (plt.get_backend() == backend::level_zero)) &&
-                   (sycl_be.find("level_zero") != std::string::npos))) {
+                   (sycl_be.find("level_zero") != std::string::npos)) ||
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
+                   (sycl_be.find("cuda") != std::string::npos)) ||
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
+                   (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:HAHA{{"
                    << ver << "}}" << std::endl;
                 passed = true;
