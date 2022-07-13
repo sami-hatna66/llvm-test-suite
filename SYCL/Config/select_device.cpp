@@ -192,20 +192,23 @@ int main() {
                    << "}}" << std::endl;
                 passed = true;
                 break;
-              } else if ((plt.get_backend() ==
-                          backend::ext_oneapi_level_zero) &&
+              } else if (((plt.get_backend() ==
+                           backend::ext_oneapi_level_zero) ||
+                          (plt.get_backend() == backend::level_zero)) &&
                          (sycl_be.find("level_zero") != std::string::npos)) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
                 passed = true;
                 break;
-              } else if ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+              } else if ((plt.get_backend() == backend::cuda ||
+                          plt.get_backend() == backend::ext_oneapi_cuda) &&
                          (sycl_be.find("cuda") != std::string::npos)) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
                 passed = true;
                 break;
-              } else if ((plt.get_backend() == backend::ext_oneapi_hip) &&
+              } else if ((plt.get_backend() == backend::hip ||
+                          plt.get_backend() == backend::ext_oneapi_hip) &&
                          (sycl_be.find("hip") != std::string::npos)) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
@@ -261,11 +264,14 @@ int main() {
           std::string ver = plt.get_info<info::platform::version>();
           if (((plt.get_backend() == backend::opencl) &&
                (sycl_be.find("opencl") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+              (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                (plt.get_backend() == backend::level_zero)) &&
                (sycl_be.find("level_zero") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+              (((plt.get_backend() == backend::cuda) ||
+                (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                (sycl_be.find("cuda") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_hip) &&
+              (((plt.get_backend() == backend::hip) ||
+                (plt.get_backend() == backend::ext_oneapi_hip)) &&
                (sycl_be.find("hip") != std::string::npos))) {
             fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
                << "}}" << std::endl;
@@ -321,11 +327,14 @@ int main() {
               std::string ver("98.76.54321");
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
                    (sycl_be.find("level_zero") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                    (sycl_be.find("cuda") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_hip) &&
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
                    (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:{{" << ver
                    << "}}" << std::endl;
@@ -384,21 +393,24 @@ int main() {
                << "}}" << std::endl;
             passed = true;
             break;
-          } else if ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+          } else if (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                      (plt.get_backend() == backend::level_zero)) &&
                      (sycl_be.find("level_zero") != std::string::npos)) {
             std::string ver("12.34");
             fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
                << "}}" << std::endl;
             passed = true;
             break;
-          } else if ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+          } else if (((plt.get_backend() == backend::ext_oneapi_cuda) ||
+                      (plt.get_backend() == backend::cuda)) &&
                      (sycl_be.find("cuda") != std::string::npos)) {
             std::string ver("CUDA 89.78");
             fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
                << "}}" << std::endl;
             passed = true;
             break;
-          } else if ((plt.get_backend() == backend::ext_oneapi_hip) &&
+          } else if (((plt.get_backend() == backend::ext_oneapi_hip) ||
+                      (plt.get_backend() == backend::hip)) &&
                      (sycl_be.find("hip") != std::string::npos)) {
             std::string ver("67.88.9");
             fs << "PlatformName:{{" << name << "}},PlatformVersion:{{" << ver
@@ -468,10 +480,12 @@ int main() {
                       "Malformed syntax in version string");
                 }
                 ver.replace(start, pos - start, "*");
-              } else if (((plt.get_backend() == backend::ext_oneapi_cuda) &&
-                          (sycl_be.find("cuda") != std::string::npos)) ||
-                         ((plt.get_backend() == backend::ext_oneapi_hip) &&
-                          (sycl_be.find("hip") != std::string::npos))) {
+              } else if (((plt.get_backend() == backend::cuda) ||
+                          (plt.get_backend() == backend::ext_oneapi_cuda)) &&
+                             (sycl_be.find("cuda") != std::string::npos) ||
+                         ((plt.get_backend() == backend::hip) ||
+                          (plt.get_backend() == backend::ext_oneapi_hip)) &&
+                             (sycl_be.find("hip") != std::string::npos)) {
                 if ((pos = ver.find(".")) == std::string::npos) {
                   throw std::runtime_error(
                       "Malformed syntax in version string");
@@ -534,11 +548,14 @@ int main() {
               addEscapeSymbolToSpecialCharacters(name);
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
                    (sycl_be.find("level_zero") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                    (sycl_be.find("cuda") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_hip) &&
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
                    (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:{{" << name << "}}" << std::endl;
                 passed = true;
@@ -587,11 +604,14 @@ int main() {
           addEscapeSymbolToSpecialCharacters(name);
           if (((plt.get_backend() == backend::opencl) &&
                (sycl_be.find("opencl") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+              (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                (plt.get_backend() == backend::level_zero)) &&
                (sycl_be.find("level_zero") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+              (((plt.get_backend() == backend::cuda) ||
+                (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                (sycl_be.find("cuda") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_hip) &&
+              (((plt.get_backend() == backend::hip) ||
+                (plt.get_backend() == backend::ext_oneapi_hip)) &&
                (sycl_be.find("hip") != std::string::npos))) {
             fs << "PlatformName:{{" << name << "}}" << std::endl;
             passed = true;
@@ -644,11 +664,14 @@ int main() {
               std::string ver = dev.get_info<info::device::driver_version>();
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
                    (sycl_be.find("level_zero") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                    (sycl_be.find("cuda") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_hip) &&
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
                    (sycl_be.find("hip") != std::string::npos))) {
                 if (count > 0) {
                   ss << " | ";
@@ -710,11 +733,14 @@ int main() {
               addEscapeSymbolToSpecialCharacters(name);
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
                    (sycl_be.find("level_zero") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                    (sycl_be.find("cuda") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_hip) &&
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
                    (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:HAHA{{" << name << "}}" << std::endl;
                 passed = true;
@@ -775,11 +801,14 @@ int main() {
           addEscapeSymbolToSpecialCharacters(name);
           if (((plt.get_backend() == backend::opencl) &&
                (sycl_be.find("opencl") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+              (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                (plt.get_backend() == backend::level_zero)) &&
                (sycl_be.find("level_zero") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+              (((plt.get_backend() == backend::cuda) ||
+                (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                (sycl_be.find("cuda") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_hip) &&
+              (((plt.get_backend() == backend::hip) ||
+                (plt.get_backend() == backend::ext_oneapi_hip)) &&
                (sycl_be.find("hip") != std::string::npos))) {
             fs << "PlatformName:HAHA{{" << name << "}}" << std::endl;
             passed = true;
@@ -841,11 +870,14 @@ int main() {
               std::string ver = dev.get_info<info::device::driver_version>();
               if (((plt.get_backend() == backend::opencl) &&
                    (sycl_be.find("opencl") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+                  (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                    (plt.get_backend() == backend::level_zero)) &&
                    (sycl_be.find("level_zero") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+                  (((plt.get_backend() == backend::cuda) ||
+                    (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                    (sycl_be.find("cuda") != std::string::npos)) ||
-                  ((plt.get_backend() == backend::ext_oneapi_hip) &&
+                  (((plt.get_backend() == backend::hip) ||
+                    (plt.get_backend() == backend::ext_oneapi_hip)) &&
                    (sycl_be.find("hip") != std::string::npos))) {
                 fs << "DeviceName:{{" << name << "}},DriverVersion:HAHA{{"
                    << ver << "}}" << std::endl;
@@ -908,11 +940,14 @@ int main() {
           std::string ver = plt.get_info<info::platform::version>();
           if (((plt.get_backend() == backend::opencl) &&
                (sycl_be.find("opencl") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_level_zero) &&
+              (((plt.get_backend() == backend::ext_oneapi_level_zero) ||
+                (plt.get_backend() == backend::level_zero)) &&
                (sycl_be.find("level_zero") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_cuda) &&
+              (((plt.get_backend() == backend::cuda) ||
+                (plt.get_backend() == backend::ext_oneapi_cuda)) &&
                (sycl_be.find("cuda") != std::string::npos)) ||
-              ((plt.get_backend() == backend::ext_oneapi_hip) &&
+              (((plt.get_backend() == backend::hip) ||
+                (plt.get_backend() == backend::ext_oneapi_hip)) &&
                (sycl_be.find("hip") != std::string::npos))) {
             fs << "PlatformName:{{" << name << "}},PlatformVersion:HAHA{{"
                << ver << "}}" << std::endl;
